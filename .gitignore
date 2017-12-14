@@ -1,0 +1,22 @@
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.next
+release.properties
+*.log
+
+build/
+.gradle/
+
+*.iml
+.idea/
+
+.vagrant/
+*.class
+
+# Packaged files #
+*.jar
+*.war
+*.ear
+/target/
+/*.log
