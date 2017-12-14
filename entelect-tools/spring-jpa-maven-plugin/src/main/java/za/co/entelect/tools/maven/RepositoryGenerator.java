@@ -32,7 +32,7 @@ public class RepositoryGenerator extends CodeGenerator {
         context.put("repositorySimpleTypeName", repositorySimpleTypeName);
         context.put("entitySimpleTypeName", entitySimpleTypeName);
 
-        String result = mergeWithTemplate(TEMPLATES_PREFIX + "templates/repository.vm", context);
+        String result = mergeWithTemplate(TEMPLATES_PREFIX + "repository.vm", context);
 
         File javaComponentFile = createJavaComponentFile(outputDirectory, generatedComponentPackage, repositorySimpleTypeName);
 

@@ -53,7 +53,7 @@ public class ServiceGenerator extends CodeGenerator {
 
         context.put("abstractServiceSimpleTypeName", abstractServiceSimpleTypeName);
 
-        String result = mergeWithTemplate(TEMPLATES_PREFIX + getDesiredTemplate(), context);
+        String result = mergeWithTemplate(getDesiredTemplate(), context);
 
         File javaComponentFile = createJavaComponentFile(outputDirectory, generatedComponentPackage, implementServices ? serviceSimpleTypeName : abstractServiceSimpleTypeName);
 
@@ -77,17 +77,17 @@ public class ServiceGenerator extends CodeGenerator {
 
     private String getDesiredTemplate() {
         if (implementServices) {
-            return "templates/service.vm";
+            return TEMPLATES_PREFIX + "service.vm";
         }
 
-        return "templates/abstract-entity-service.vm";
+        return TEMPLATES_PREFIX + "abstract-entity-service.vm";
     }
 
     private void doGenerateAbstractServiceCode(File outputDirectory, JavaComponentPackage generatedComponentPackage, VelocityContext context) throws IOException {
         File javaComponentFile = createJavaComponentFile(outputDirectory, generatedComponentPackage, DEFAULT_ABSTRACT_SERVICE_CLASS_NAME);
         if (!javaComponentFile.exists()) {
             context.put("servicePackage", generatedComponentPackage.asPackage());
-            String result = mergeWithTemplate(TEMPLATES_PREFIX + "templates/abstract-service.vm", context);
+            String result = mergeWithTemplate(TEMPLATES_PREFIX + "abstract-service.vm", context);
             FileUtils.write(javaComponentFile, result, Charset.defaultCharset());
         }
     }

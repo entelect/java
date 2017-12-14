@@ -1,7 +1,5 @@
 package za.co.entelect.tools.maven;
 
-import com.sandbox.maven.aether.Aether;
-import com.sandbox.maven.aether.RepositorySystemProvider;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.maven.artifact.Artifact;
@@ -19,13 +17,8 @@ import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.graph.DependencyFilter;
-import org.eclipse.aether.impl.ArtifactResolver;
-import org.eclipse.aether.resolution.ArtifactRequest;
-import org.eclipse.aether.resolution.ArtifactResult;
 import org.eclipse.aether.resolution.DependencyRequest;
-import org.eclipse.aether.resolution.DependencyResult;
 import org.eclipse.aether.spi.locator.ServiceLocator;
-import org.eclipse.aether.util.artifact.JavaScopes;
 import org.eclipse.aether.util.filter.DependencyFilterUtils;
 import org.springframework.util.StringUtils;
 
@@ -65,39 +58,6 @@ public abstract class SpringJpaMojo extends AbstractMojo {
 
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
-
-        Aether aether = new Aether(mavenProject, new File(mavenSession.getLocalRepository().getBasedir()));
-        try {
-
-            ArtifactResolver service = RepositorySystemProvider.serviceLocator().getService(ArtifactResolver.class);
-
-            ArtifactRequest request = new ArtifactRequest();
-            request.setRepositories(mavenProject.getRemoteProjectRepositories());
-            org.eclipse.aether.artifact.DefaultArtifact artifact = new org.eclipse.aether.artifact.DefaultArtifact("com.github.panhongan", "java-utils", "jar", "0.1.6");
-            request.setArtifact(artifact);
-
-            ArtifactResult artifactResult = service.resolveArtifact(RepositorySystemProvider.repositorySystemSession(mavenSession.getLocalRepository().getBasedir()),
-                    request
-            );
-
-            DependencyResult dependencyResult = RepositorySystemProvider.repositorySystem().resolveDependencies(RepositorySystemProvider.repositorySystemSession(mavenSession.getLocalRepository().getBasedir()),
-                    dependencyRequest(artifact, JavaScopes.COMPILE)
-            );
-
-            System.out.println(dependencyResult);
-
-            for (ArtifactResult result : dependencyResult.getArtifactResults()) {
-                System.out.println(result.getArtifact());
-            }
-
-
-            List<org.eclipse.aether.artifact.Artifact> resolve = aether.resolve(new org.eclipse.aether.artifact.DefaultArtifact("nl.trivento.albero", "albero-repositories-classpath", "jar", "0.2"), JavaScopes.COMPILE);
-            System.out.println(resolve);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
         PluginLogger.configure(getLog());
 
         if (skip) {

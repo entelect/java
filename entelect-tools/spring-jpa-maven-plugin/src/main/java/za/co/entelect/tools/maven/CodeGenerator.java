@@ -1,20 +1,16 @@
 package za.co.entelect.tools.maven;
 
-import com.sandbox.maven.aether.Aether;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
-import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
-import org.eclipse.aether.artifact.DefaultArtifact;
-import org.eclipse.aether.resolution.DependencyResolutionException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
@@ -29,7 +25,6 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -67,10 +62,6 @@ public abstract class CodeGenerator {
         this.classLoader = classLoader;
         this.entityComponentPackage = entityComponentPackage;
         initTemplateEngine();
-    }
-
-    public Boolean getAutoCompileEntities() {
-        return autoCompileEntities;
     }
 
     public void setAutoCompileEntities(Boolean autoCompileEntities) {
@@ -150,63 +141,16 @@ public abstract class CodeGenerator {
     private Element[] compilerClasspathElements() {
         List<String> classpathElements = getMavenRuntimeClasspathElements();
         List<Element> allClasspathElements = new ArrayList<Element>();
-        String repo = mavenConfiguration.session.getLocalRepository().getBasedir();
-        Aether aether = new Aether(mavenConfiguration.project, new File(repo));
         Set<Artifact> artifacts = mavenConfiguration.project.getArtifacts();
         for (Artifact artifact : artifacts) {
             classpathElements.add(artifact.getFile().getAbsolutePath());
         }
-
-        /*Set<Artifact> dependencyArtifacts = mavenConfiguration.project.getDependencyArtifacts();
-        for (Artifact artifact : dependencyArtifacts) {
-            if ("test".equalsIgnoreCase(artifact.getScope())) continue;
-
-            List<org.eclipse.aether.artifact.Artifact> deps = resolveDeps(aether, artifact, JavaScopes.COMPILE);
-
-            for (org.eclipse.aether.artifact.Artifact dependencyArtifact : deps) {
-                classpathElements.add(dependencyArtifact.getFile().getAbsolutePath());
-            }
-        }*/
 
         for (String classpathElement : classpathElements) {
             allClasspathElements.add(element("compilePath", classpathElement));
         }
 
         return allClasspathElements.toArray(new Element[allClasspathElements.size()]);
-
-        /*ArtifactHandler handler = new DefaultArtifactHandler("jar");
-
-        org.apache.maven.artifact.DefaultArtifact defaultArtifact = new org.apache.maven.artifact.DefaultArtifact(
-                "org.hibernate.javax.persistence",
-                "hibernate-jpa-2.1-api",
-                "1.0.0.Final",
-                "compile",
-                "jar",
-                "",
-                handler
-        );
-
-
-        Artifact artifact = mavenConfiguration.session.getLocalRepository().find(defaultArtifact);
-        List<String> classpath = new ArrayList<String>();
-
-        try {
-            classpath.addAll(
-                    mavenConfiguration.project.getRuntimeClasspathElements());
-        } catch (DependencyResolutionRequiredException e) {
-            e.printStackTrace();
-        }
-
-        classpath.add(artifact.getFile().getAbsolutePath());
-
-        List<Element> elements = new ArrayList<Element>();
-
-        for (String cElement : classpath) {
-            elements.add(new Element("compilePath", cElement));
-        }
-
-        return elements.toArray(new Element[0]);*/
-
     }
 
     private List<String> getMavenRuntimeClasspathElements() {
@@ -219,24 +163,6 @@ public abstract class CodeGenerator {
         }
 
         return classpathElements;
-    }
-
-    private Dependency buildDependency(org.eclipse.aether.artifact.Artifact artifact) {
-        Dependency dependency = new Dependency();
-        dependency.setGroupId(artifact.getGroupId());
-        dependency.setArtifactId(artifact.getArtifactId());
-        dependency.setVersion(artifact.getVersion());
-        return dependency;
-    }
-
-    private List<org.eclipse.aether.artifact.Artifact> resolveDeps(Aether aether, Artifact artifact, String scope) {
-        try {
-            return aether.resolve(new DefaultArtifact(artifact.getGroupId(), artifact.getArtifactId(), artifact.getClassifier(), artifact.getType(), artifact.getVersion()), scope);
-        } catch (DependencyResolutionException e) {
-            PluginLogger.warn(e.getMessage());
-            e.printStackTrace();
-        }
-        return Collections.emptyList();
     }
 
     private boolean isEntitySuppressed(String className, List<String> suppressEntities) {

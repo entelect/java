@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>spring-jpa-maven-plugin-demo</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <parent>
+        <groupId>za.co.entelect</groupId>
+        <artifactId>entelect-tools</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>generate-spring-jpa</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>za.co.entelect</groupId>
+                        <artifactId>spring-jpa-maven-plugin</artifactId>
+                        <version>1.0.0-SNAPSHOT</version>
+                        <configuration>
+                            <skip>false</skip>
+                            <entityScanPackage>za.co.entelect.tools.sample.model</entityScanPackage>
+                            <repositoryPackage>za.co.entelect.tools.sample.repository</repositoryPackage>
+                            <servicePackage>za.co.entelect.tools.sample.service</servicePackage>
+                            <suppressEntities>
+                                <suppressEntity>za.co.entelect.tools.sample.model.EntityToSuppress</suppressEntity>
+                            </suppressEntities>
+                            <autoCompileEntities>true</autoCompileEntities>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>generate-all</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>all</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

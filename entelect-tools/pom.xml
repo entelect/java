@@ -21,5 +21,6 @@
 
     <modules>
         <module>spring-jpa-maven-plugin</module>
+        <module>spring-jpa-maven-plugin-demo</module>
     </modules>
 </project>
