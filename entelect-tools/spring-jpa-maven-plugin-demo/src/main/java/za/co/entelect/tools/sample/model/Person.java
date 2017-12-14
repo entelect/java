@@ -7,7 +7,6 @@ import java.io.Serializable;
 /**
  * Created by ronald.mthombeni on 2017/09/22.
  */
-//https://github.com/kilim/kilim/blob/master/src/kilim/tools/Javac.java
 @Entity
 public class Person implements Serializable {
     @Id
