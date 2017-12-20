@@ -11,7 +11,8 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.springframework.util.StringUtils;
 
 /**
- * Created by ronald.mthombeni on 2017/09/21.
+ * @author Ronald Mthombeni
+ * @author Salman Noor
  */
 @Getter
 @Setter

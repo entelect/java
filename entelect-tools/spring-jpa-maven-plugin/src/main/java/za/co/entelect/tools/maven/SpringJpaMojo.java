@@ -17,7 +17,8 @@ import java.io.File;
 import java.util.List;
 
 /**
- * Created by ronald.mthombeni on 2017/09/28.
+ * @author Ronald Mthombeni
+ * @author Salman Noor
  */
 @Getter
 @Setter
@@ -46,7 +47,6 @@ public abstract class SpringJpaMojo extends AbstractMojo {
 
     ServiceLocator serviceLocator;
 
-    @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
         PluginLogger.configure(getLog());
 
